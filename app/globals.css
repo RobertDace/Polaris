@@ -1,0 +1,167 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-primary: #0F141C;
+    --text-primary: #E2E8F0;
+    --text-muted: #94A3B8;
+
+    /* PURE PRIMARY COLOR SPECTRUM */
+    --primary-blue: #0047FF;     /* Robit: Biru Elektrik Primer */
+    --primary-green: #00C853;    /* Naiqo: Hijau Matcha/Emerald Primer */
+    --primary-cyan: #00F5D4;     /* Babak 2: Biru + Hijau = Cyan Primer Murni */
+    --primary-red: #FF1E40;      /* Babak 4: Merah Katalis Keberanian */
+    --primary-gold: #FFD700;     /* Babak 5: Kuning Emas Polaris */
+
+    --accent-robit: var(--primary-blue);
+    --accent-naiqo: var(--primary-green);
+    --accent-matcha: var(--primary-green);
+    --accent-gold: var(--primary-gold);
+    --accent-catalyst: var(--primary-red);
+    
+    --card-bg: rgba(27, 42, 74, 0.4);
+    --card-radius: 8px;
+    --card-border: 1px solid rgba(255, 255, 255, 0.08);
+    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    --card-blur: blur(4px);
+  }
+
+  /* BABAK 1: Linear Dark Mode + Rigid Bento Grid */
+  [data-act="1"] {
+    --bg-primary: #0F141C;
+    --text-primary: #E2E8F0;
+    --text-muted: #64748B;
+    --accent-robit: #1B2A4A;
+    --accent-naiqo: #2E4A3E;
+    --card-bg: rgba(27, 42, 74, 0.35);
+    --card-radius: 8px;
+    --card-border: 1px solid rgba(255, 255, 255, 0.08);
+    --card-shadow: none;
+    --card-blur: blur(4px);
+  }
+
+  /* BABAK 2: Frosted Touch Glassmorphism (Cyan & Teal Zona Nyaman) */
+  [data-act="2"] {
+    --bg-primary: #102632;
+    --text-primary: #F0FDFA;
+    --text-muted: #99F6E4;
+    --accent-robit: #1A5F7A;
+    --accent-naiqo: #2EC4B6;
+    --card-bg: rgba(46, 196, 182, 0.12);
+    --card-radius: 24px;
+    --card-border: 1px solid rgba(168, 218, 220, 0.25);
+    --card-shadow: 0 20px 50px rgba(26, 95, 122, 0.3);
+    --card-blur: blur(20px);
+  }
+
+  /* BABAK 3: Resonant Stark + Soft Neumorphism (Lembayung Redup & Perak Beku) */
+  [data-act="3"] {
+    --bg-primary: #D1D5DB;
+    --text-primary: #1F2937;
+    --text-muted: #4B5563;
+    --accent-robit: #6C5B7B;
+    --accent-naiqo: #9CA3AF;
+    --card-bg: #D1D5DB;
+    --card-radius: 32px;
+    --card-border: 1px solid rgba(255, 255, 255, 0.6);
+    --card-shadow: inset 6px 6px 12px #B8BCC2, inset -6px -6px 12px #EAEEF4;
+    --card-blur: none;
+  }
+
+  /* BABAK 4: Tactile Brutalism + Katalis Merah -> Kuning */
+  [data-act="4"] {
+    --bg-primary: #141416;
+    --text-primary: #FAFAFA;
+    --text-muted: #A1A1AA;
+    --accent-robit: #1D4ED8;
+    --accent-naiqo: #FFD700;
+    --accent-catalyst: #E63946;
+    --card-bg: #09090B;
+    --card-radius: 0px;
+    --card-border: 2px solid #E63946;
+    --card-shadow: 8px 8px 0px #E63946;
+    --card-blur: none;
+  }
+
+  /* BABAK 5: Editorial Neo-Brutalism (Ending Warna Primer Murni + Starlight Gold) */
+  [data-act="5"] {
+    --bg-primary: #FAF9F6;
+    --text-primary: #111827;
+    --text-muted: #475569;
+    --accent-robit: #1D4ED8;
+    --accent-naiqo: #FFD700;
+    --accent-matcha: #3A6941;
+    --card-bg: #FFFFFF;
+    --card-radius: 4px;
+    --card-border: 2px solid #111827;
+    --card-shadow: 6px 6px 0px #111827;
+    --card-blur: none;
+  }
+
+  /* MODE INTERAKTIF "WHAT IF": Degenerasi Kembali ke Dark Frosted Teal */
+  [data-act="what-if"] {
+    --bg-primary: #070F0F !important;
+    --text-primary: #64748B !important;
+    --text-muted: #475569 !important;
+    --accent-robit: #16222F !important;
+    --accent-naiqo: #1E352F !important;
+    --card-bg: rgba(30, 53, 47, 0.28) !important;
+    --card-radius: 28px !important;
+    --card-border: 1px solid rgba(255, 255, 255, 0.04) !important;
+    --card-shadow: inset 0 0 90px rgba(0, 0, 0, 0.9) !important;
+    --card-blur: blur(30px) !important;
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: background-color 0.85s cubic-bezier(0.22, 1, 0.36, 1), color 0.65s ease;
+    overflow-x: hidden;
+  }
+}
+
+.font-serif {
+  font-family: 'DM Serif Display', Georgia, serif;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Story Card Dynamic Mutator */
+.story-card-surface {
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  border: var(--card-border);
+  box-shadow: var(--card-shadow);
+  backdrop-filter: var(--card-blur);
+  -webkit-backdrop-filter: var(--card-blur);
+  transition: all 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.25);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
+}
+
+/* Vignette overlay for What If */
+.what-if-vignette {
+  box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.95), inset 0 0 60px rgba(10, 25, 20, 0.9);
+}
+
+/* Starlight Glow */
+.starlight-glow {
+  filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.65)) drop-shadow(0 0 35px rgba(75, 127, 82, 0.45));
+}
