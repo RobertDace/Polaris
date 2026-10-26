@@ -344,44 +344,9 @@ export default function SpaceVoyageHUD({
   };
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-10 flex flex-col justify-between p-4 sm:p-8 select-none overflow-hidden">
-      
-      {/* 1. TOP NAVIGATION BAR (Minimalist, borderless, clean) */}
-      <header className="flex items-center justify-between w-full pointer-events-auto">
-        {/* Brand Monogram & Title */}
-        <div className="flex items-center gap-3">
-          <div
-            className="w-9 h-9 rounded-xl flex items-center justify-center border transition-colors shadow-lg backdrop-blur-md"
-            style={{
-              borderColor: `${currentWorld.accentColor}60`,
-              backgroundColor: "rgba(0, 0, 0, 0.4)",
-              color: currentWorld.accentColor,
-            }}
-          >
-            <Sparkles size={18} className="animate-spin" style={{ animationDuration: "14s" }} />
-          </div>
-          <div>
-            <h2 className="font-sans text-base sm:text-lg font-black tracking-wider text-white">
-              POLARIS
-            </h2>
-            <p className="text-[9px] font-mono tracking-widest text-white/50 uppercase">
-              ROBIT & NAIQO · 365 DAYS (2025–2026)
-            </p>
-          </div>
-        </div>
-
-        {/* Quick Sanctuary Link */}
-        <div className="flex items-center gap-3">
-          <button
-            onClick={handleOpenPromise}
-            className="px-3.5 py-1.5 rounded-full border border-amber-400/40 text-amber-300 hover:text-white hover:border-amber-300 transition-all text-xs font-mono font-medium flex items-center gap-1.5 backdrop-blur-md cursor-pointer active:scale-95"
-            title="Buka Surat Rahasia & Kotak Janji"
-          >
-            <Star size={13} fill="currentColor" />
-            <span>Kotak Janji</span>
-          </button>
-        </div>
-      </header>
+    <div className="fixed inset-0 pointer-events-none z-10 flex flex-col justify-between pt-20 pb-6 px-4 sm:px-8 select-none overflow-hidden">
+      {/* Top spacer for global HeaderNav */}
+      <div className="w-full" />
 
       {/* 2. MAIN CENTER STAGE: LEFT RAIL + CENTER SQUIRCLE PORTAL */}
       <div className="relative flex-1 flex items-center justify-between w-full my-auto pointer-events-none">

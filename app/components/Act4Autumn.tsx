@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
 import { motion } from "framer-motion";
-import { Bus, Snowflake, ArrowDown, Ticket, Sparkles, MapPin, Check, Compass, Calendar, Eye, Send } from "lucide-react";
+import { Bus, Snowflake, ArrowDown, Ticket, Check, Calendar, Box, RotateCcw } from "lucide-react";
 import { playStampSFX, playBusHornSFX, playPopSFX } from "../utils/sfx";
 import CosmicPortalGateway from "./CosmicPortalGateway";
+import ThreeMoscowDome3D from "./ThreeMoscowDome3D";
+import ModelViewerGLB from "./ModelViewerGLB";
 import { worldBridge } from "../world/WorldBridge";
 
 interface Act4AutumnProps {
@@ -14,6 +15,7 @@ interface Act4AutumnProps {
 
 export default function Act4Autumn({ onNext }: Act4AutumnProps) {
   const [ticketStamped, setTicketStamped] = useState(false);
+  const [domeMode, setDomeMode] = useState<"procedural" | "glb">("procedural");
 
   const handleStampTicket = () => {
     if (ticketStamped) return;
@@ -41,11 +43,11 @@ export default function Act4Autumn({ onNext }: Act4AutumnProps) {
     >
       {/* Immersive Autumn Atmospheric Background Layer */}
       <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
-        <div className="absolute top-1/3 -left-32 w-96 h-96 rounded-full bg-[#FF1E40]/15 blur-3xl animate-pulse" style={{ animationDuration: "6s" }} />
-        <div className="absolute bottom-1/3 -right-32 w-[450px] h-[450px] rounded-full bg-[#FFB703]/15 blur-3xl animate-pulse" style={{ animationDuration: "8s" }} />
+        <div className="absolute top-1/3 -left-32 w-96 h-96 rounded-full bg-[#FF1E40]/15 blur-3xl" />
+        <div className="absolute bottom-1/3 -right-32 w-[450px] h-[450px] rounded-full bg-[#FFB703]/15 blur-3xl" />
       </div>
 
-      {/* Chapter Indicator & Editorial Intro (Non-Bento) */}
+      {/* Chapter Indicator & Editorial Intro */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -95,7 +97,7 @@ export default function Act4Autumn({ onNext }: Act4AutumnProps) {
           </div>
 
           <div className="flex items-center gap-4 text-xs font-mono">
-            <span className="flex items-center gap-1.5 text-amber-400">
+            <span className="flex items-center gap-1.5 text-amber-400 tabular-nums">
               <Calendar size={14} />
               <span>23 JUNI 2026</span>
             </span>
@@ -108,9 +110,8 @@ export default function Act4Autumn({ onNext }: Act4AutumnProps) {
         {/* Route Checkpoints Timeline */}
         <div className="py-8 grid grid-cols-2 md:grid-cols-4 gap-6 border-b-2 border-zinc-800">
           {routeCheckpoints.map((cp, idx) => (
-            <div key={idx} className="relative pl-4 border-l-2 border-[#FF1E40]">
-              <div className="absolute -left-[5px] top-0 w-2 h-2 rounded-full bg-[#FF1E40]" />
-              <span className="text-[10px] font-mono text-zinc-500 uppercase block font-bold">
+            <div key={idx} className="relative p-4 bg-zinc-900/70 border border-zinc-800">
+              <span className="text-[10px] font-mono text-[#FF1E40] uppercase block font-bold tabular-nums">
                 {cp.time}
               </span>
               <h4 className="font-mono text-base font-black text-white mt-0.5">
@@ -129,11 +130,20 @@ export default function Act4Autumn({ onNext }: Act4AutumnProps) {
             Malam itu di atas bus, menatap jendela yang basah oleh angin malam. Ratusan kilometer terbentang. Orang bilang perjalanan bus malam itu melelahkan, tapi bagiku, itu adalah perjalanan paling membahagiakan: karena di ujung peron itu, ada kamu.
           </p>
 
-          <div className="flex-shrink-0 w-full md:w-auto">
+          <div className="shrink-0 w-full md:w-auto">
             {ticketStamped ? (
-              <div className="p-4 bg-red-950/70 border-2 border-[#FF1E40] text-[#FF1E40] font-mono text-xs font-bold text-center animate-in zoom-in-95 duration-300 flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(255,30,64,0.4)]">
-                <Check size={18} strokeWidth={3} />
-                <span>TIKET TERVALIDASI: "Aku akan selalu menempuh rute mana pun untukmu."</span>
+              <div className="flex items-center gap-2">
+                <div className="p-4 bg-red-950/70 border-2 border-[#FF1E40] text-[#FF1E40] font-mono text-xs font-bold text-center flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(255,30,64,0.4)]">
+                  <Check size={18} strokeWidth={3} />
+                  <span>TIKET TERVALIDASI: &ldquo;Aku akan selalu menempuh rute mana pun untukmu.&rdquo;</span>
+                </div>
+                <button
+                  onClick={() => { playPopSFX(); setTicketStamped(false); }}
+                  className="p-4 bg-zinc-900 border-2 border-zinc-700 text-zinc-300 hover:text-white cursor-pointer"
+                  title="Cap Ulang Tiket"
+                >
+                  <RotateCcw size={16} />
+                </button>
               </div>
             ) : (
               <button
@@ -156,41 +166,57 @@ export default function Act4Autumn({ onNext }: Act4AutumnProps) {
         transition={{ duration: 0.8, delay: 0.25 }}
         className="relative bg-zinc-950/90 border-2 border-amber-400 shadow-[10px_10px_0px_#F59E0B] p-6 sm:p-10 overflow-hidden backdrop-blur-md"
       >
-        <div className="flex flex-col md:flex-row items-center gap-8">
+        <div className="flex flex-col lg:flex-row items-center gap-8">
           
-          {/* Panoramic Framed Viewport looking directly at 3D Station 4 */}
-          <div className="relative w-full md:w-1/2 flex flex-col items-center space-y-3">
-            <div className="relative w-full p-6 sm:p-8 border-2 border-amber-400/60 overflow-hidden bg-black/60 rounded-2xl shadow-inner backdrop-blur-sm space-y-4">
-              <div className="flex items-center justify-between text-[11px] font-mono text-amber-300">
-                <span className="flex items-center gap-1.5 uppercase font-bold">
-                  <Snowflake size={14} className="text-cyan-300 animate-spin" style={{ animationDuration: "12s" }} />
-                  <span>Stasiun 3D Musim Gugur & Salju</span>
-                </span>
-                <span className="px-2 py-0.5 rounded bg-amber-400/20 border border-amber-400/50 text-amber-200 text-[10px]">
-                  KUBAH RUSIA & SALJU DUNIA
-                </span>
-              </div>
+          {/* Left: Interactive 3D Moscow Dome & .GLB Model Switcher */}
+          <div className="relative w-full lg:w-1/2 flex flex-col items-center space-y-3">
+            <div className="w-full flex items-center justify-between px-1">
+              <span className="flex items-center gap-1.5 text-[11px] font-mono text-amber-300 uppercase font-bold">
+                <Snowflake size={14} className="text-cyan-300 animate-spin" style={{ animationDuration: "12s" }} />
+                <span>Katedral St. Basil Moscow 3D</span>
+              </span>
 
-              <div className="py-6 text-center space-y-3">
-                <div className="w-16 h-16 mx-auto rounded-full bg-amber-500/10 border-2 border-amber-400/80 flex items-center justify-center text-amber-300 shadow-[0_0_30px_rgba(245,158,11,0.3)]">
-                  <Compass size={28} />
-                </div>
-                <h4 className="font-mono text-sm font-bold text-white tracking-wider uppercase">
-                  Horizon Kubah Katedral Saint Basil
-                </h4>
-                <p className="text-xs text-zinc-300 font-sans leading-relaxed">
-                  Kubah emas dan salju lembut berputar di latar belakang 3D dunia, membawa impian perjalanan yang kelak akan kita wujudkan berdua.
-                </p>
+              <div className="flex items-center gap-1 p-1 bg-zinc-900 border border-amber-400/40">
+                <button
+                  onClick={() => { playPopSFX(); setDomeMode("procedural"); }}
+                  className={`px-2.5 py-1 text-[10px] font-mono cursor-pointer transition-colors ${
+                    domeMode === "procedural"
+                      ? "bg-amber-400 text-black font-black"
+                      : "text-amber-200 hover:text-white"
+                  }`}
+                >
+                  Kubah & Salju 3D
+                </button>
+                <button
+                  onClick={() => { playPopSFX(); setDomeMode("glb"); }}
+                  className={`px-2.5 py-1 text-[10px] font-mono flex items-center gap-1 cursor-pointer transition-colors ${
+                    domeMode === "glb"
+                      ? "bg-amber-400 text-black font-black"
+                      : "text-amber-200 hover:text-white"
+                  }`}
+                >
+                  <Box size={11} />
+                  <span>Model .GLB</span>
+                </button>
               </div>
+            </div>
 
-              <div className="text-[10px] font-mono text-center text-zinc-400 pt-2 border-t border-zinc-800">
-                Gunakan kursor atau swipe untuk berinteraksi dengan arah kamera 3D
-              </div>
+            <div className="w-full border-2 border-amber-400/50 bg-black/60 overflow-hidden">
+              {domeMode === "procedural" ? (
+                <ThreeMoscowDome3D />
+              ) : (
+                <ModelViewerGLB
+                  modelPath="/models/act4-moscow.glb"
+                  fallbackTitle="Katedral St. Basil Moscow (.GLB)"
+                  accentColor="#F59E0B"
+                  className="w-full h-64 sm:h-72 rounded-none border-0"
+                />
+              )}
             </div>
           </div>
 
-          {/* Moscow Narrative */}
-          <div className="w-full md:w-1/2 space-y-4">
+          {/* Right: Moscow Narrative */}
+          <div className="w-full lg:w-1/2 space-y-4">
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-mono px-2.5 py-1 bg-amber-400 text-black font-black uppercase">
                 OUR FUTURE WISH
@@ -208,9 +234,9 @@ export default function Act4Autumn({ onNext }: Act4AutumnProps) {
               Suatu malam kamu bercerita tentang impianmu melihat salju di Moscow dan kubah katedralnya yang berpendar di udara dingin. Aku menyimpannya erat-erat di dalam hatiku.
             </p>
 
-            <p className="text-xs sm:text-sm text-amber-200/90 font-serif italic border-l-2 border-amber-400 pl-3">
-              "Aku berjanji pada diriku sendiri: suatu hari nanti, saat aku sudah mapan, aku ingin kita berdiri bersama di sana—membuktikan bahwa impianmu tidak pernah terbang sendirian."
-            </p>
+            <div className="p-4 bg-amber-400/10 border border-amber-400/40 text-xs sm:text-sm text-amber-200/95 font-serif italic leading-relaxed">
+              &ldquo;Aku berjanji pada diriku sendiri: suatu hari nanti, saat aku sudah mapan, aku ingin kita berdiri bersama di sana—membuktikan bahwa impianmu tidak pernah terbang sendirian.&rdquo;
+            </div>
           </div>
 
         </div>

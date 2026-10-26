@@ -2,9 +2,10 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Moon, ArrowDown, Send, CheckCheck, Sparkles, Smartphone } from "lucide-react";
-import { playPopSFX } from "../utils/sfx";
+import { Moon, ArrowDown, Send, CheckCheck, RotateCcw, Smartphone } from "lucide-react";
+import { playPopSFX, playChimeSFX } from "../utils/sfx";
 import CosmicPortalGateway from "./CosmicPortalGateway";
+import ThreeSmartphone3D from "./ThreeSmartphone3D";
 
 interface Act1WinterProps {
   onNext: () => void;
@@ -34,6 +35,12 @@ export default function Act1Winter({ onNext }: Act1WinterProps) {
     }, 550);
   };
 
+  const handleResetChat = () => {
+    playChimeSFX();
+    setChatIndex(0);
+    setIsTyping(false);
+  };
+
   return (
     <section
       id="act-1"
@@ -49,7 +56,7 @@ export default function Act1Winter({ onNext }: Act1WinterProps) {
       >
         <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-950/80 border border-blue-400/50 text-blue-300 text-xs font-mono tracking-widest uppercase shadow-[0_0_20px_rgba(0,71,255,0.25)] backdrop-blur-md">
           <Moon size={14} className="text-blue-400" />
-          <span>BABAK 01 · MUSIM DINGIN (PERTEMUAN AWAL)</span>
+          <span>BABAK 01 · MUSIM DINGIN (PERTEMUAN AWAL 02:14 AM)</span>
         </span>
 
         <h2 className="font-serif text-3xl sm:text-6xl text-white font-bold tracking-tight mt-4 leading-[1.1]">
@@ -64,24 +71,25 @@ export default function Act1Winter({ onNext }: Act1WinterProps) {
         </p>
       </motion.div>
 
-      {/* Narrative & Phone Simulation Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center mb-12">
+      {/* Linear Bento Grid Layout: Story Left + 3D Smartphone & Interactive Chat Right */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mb-12">
         
-        {/* Story Text Left */}
+        {/* Left Column: Narrative Bento & 3D Smartphone Preview */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="lg:col-span-6 space-y-6 text-slate-300 text-sm sm:text-base leading-relaxed font-light"
+          className="lg:col-span-6 flex flex-col justify-between gap-6"
         >
-          <div className="p-8 rounded-3xl bg-[#070e1e]/75 border-2 border-[#0047FF]/30 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,71,255,0.15)] space-y-5">
+          {/* Story Card */}
+          <div className="story-card-surface p-6 sm:p-8 bg-[#070e1e]/80 border border-[#0047FF]/35 shadow-[0_20px_60px_rgba(0,71,255,0.15)] space-y-4 text-slate-300 text-sm sm:text-base leading-relaxed font-light">
             <div className="flex items-center justify-between border-b border-blue-900/50 pb-3">
               <span className="text-[10px] font-mono text-[#0047FF] font-black uppercase tracking-widest">
-                WARNA PRIMER ROBIT: BIRU ELEKTRIK
+                SPEKTRUM ROBIT: BIRU INDIGO & ELEKTRIK
               </span>
               <span className="text-[10px] font-mono text-[#00C853] font-bold">
-                MATCHA NAIQO
+                HIJAU MATCHA NAIQO
               </span>
             </div>
 
@@ -91,97 +99,133 @@ export default function Act1Winter({ onNext }: Act1WinterProps) {
             <p>
               Lalu aku melihatmu: sosok yang membumi, lembut, namun selalu menelan lelahnya sendiri demi menjaga perasaan orang di sekitarmu. Di balik warna matcha yang menenangkan, ada keraguan yang kamu simpan dalam-dalam.
             </p>
-            <p className="italic text-slate-300 border-l-2 border-[#00C853] pl-4 text-xs font-serif leading-relaxed">
-              "Kita tidak bertemu lewat peristiwa dramatis. Kita bertemu karena tanpa sadar, kita membawa frekuensi kelelahan yang sama."
+            <p className="italic text-slate-200 bg-white/5 p-3.5 rounded-lg border border-white/10 text-xs sm:text-sm font-serif leading-relaxed">
+              &ldquo;Kita tidak bertemu lewat peristiwa dramatis. Kita bertemu karena tanpa sadar, kita membawa frekuensi kelelahan yang sama.&rdquo;
             </p>
+          </div>
+
+          {/* Interactive 3D Smartphone WebGL Showcase */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between px-1 text-xs font-mono text-blue-300/80">
+              <span className="flex items-center gap-1.5">
+                <Smartphone size={13} />
+                <span>ARTEFAK MEMORI 3D: LAYAR SUBUH 02:14 AM</span>
+              </span>
+              <span className="text-[10px] text-slate-400">Drag untuk memutar 360°</span>
+            </div>
+            <ThreeSmartphone3D
+              chatText={scriptChats[chatIndex].text}
+              className="w-full h-64 sm:h-72"
+            />
           </div>
         </motion.div>
 
-        {/* Interactive Chat Console Right (Floating over 3D Smartphone World Station) */}
+        {/* Right Column: Interactive 02:14 AM Chat Console */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="lg:col-span-6 flex flex-col items-center space-y-4"
+          className="lg:col-span-6 flex flex-col justify-center"
         >
-          <div className="w-full max-w-md rounded-3xl bg-[#030712]/80 border-2 border-slate-700/60 p-6 shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_50px_rgba(0,71,255,0.2)] backdrop-blur-2xl relative overflow-hidden">
+          <div className="w-full h-full flex flex-col justify-between rounded-3xl bg-[#030712]/85 border-2 border-slate-700/60 p-6 sm:p-8 shadow-[0_25px_60px_rgba(0,0,0,0.85),0_0_50px_rgba(0,71,255,0.2)] backdrop-blur-2xl relative overflow-hidden">
             
             {/* Phone Top Notch & Starlight status */}
-            <div className="flex items-center justify-between pb-3 mb-4 border-b border-white/10 text-xs font-mono text-slate-400">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#00C853] animate-pulse" />
-                <span className="font-bold text-white">Naiqo 🍵</span>
+            <div>
+              <div className="flex items-center justify-between pb-4 mb-5 border-b border-white/10 text-xs font-mono text-slate-400">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#00C853]" />
+                  <div>
+                    <span className="font-bold text-white block leading-none">Naiqo 🍵</span>
+                    <span className="text-[10px] text-emerald-400 font-mono">online · 02:14 AM</span>
+                  </div>
+                </div>
+                <span className="text-[10px] text-amber-300 font-mono tracking-wider px-2.5 py-1 rounded-md bg-amber-400/10 border border-amber-400/20">
+                  MEMORI PERTAMA
+                </span>
               </div>
-              <span className="text-[10px] text-amber-300 font-mono tracking-wider">02:14 AM · SUBSTANSI MEMORI</span>
-            </div>
 
-            {/* Chat Bubble Area */}
-            <div className="space-y-3.5 min-h-[220px] flex flex-col justify-end">
-              <AnimatePresence>
-                {scriptChats.slice(0, chatIndex + 1).map((chat, idx) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, y: 10, scale: 0.96 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ duration: 0.3 }}
-                    className={`flex flex-col ${
-                      chat.sender === "robit" ? "items-end" : "items-start"
-                    }`}
-                  >
-                    <div
-                      className={`px-4 py-3 rounded-2xl text-xs sm:text-sm max-w-[85%] shadow-sm ${
-                        chat.sender === "robit"
-                          ? "bg-[#0047FF] text-white rounded-br-none font-medium"
-                          : "bg-[#022c22] text-emerald-100 border border-[#00C853]/40 rounded-bl-none"
+              {/* Chat Bubble Area */}
+              <div className="space-y-3.5 min-h-[280px] flex flex-col justify-end">
+                <AnimatePresence>
+                  {scriptChats.slice(0, chatIndex + 1).map((chat, idx) => (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, y: 10, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ duration: 0.3 }}
+                      className={`flex flex-col ${
+                        chat.sender === "robit" ? "items-end" : "items-start"
                       }`}
                     >
-                      <p>{chat.text}</p>
-                    </div>
-                    <span className="text-[9px] font-mono text-slate-500 mt-1 flex items-center gap-1">
-                      <span>{chat.time}</span>
-                      {chat.sender === "robit" && <CheckCheck size={12} className="text-blue-300" />}
-                    </span>
-                  </motion.div>
-                ))}
+                      <div
+                        className={`px-4 py-3 rounded-2xl text-xs sm:text-sm max-w-[85%] shadow-sm ${
+                          chat.sender === "robit"
+                            ? "bg-[#0047FF] text-white rounded-br-none font-medium"
+                            : "bg-[#022c22] text-emerald-100 border border-[#00C853]/40 rounded-bl-none"
+                        }`}
+                      >
+                        <p>{chat.text}</p>
+                      </div>
+                      <span className="text-[9px] font-mono text-slate-500 mt-1 flex items-center gap-1 tabular-nums">
+                        <span>{chat.time}</span>
+                        {chat.sender === "robit" && <CheckCheck size={12} className="text-blue-300" />}
+                      </span>
+                    </motion.div>
+                  ))}
 
-                {isTyping && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="flex items-center gap-1.5 p-2 rounded-xl bg-slate-800/60 w-16 text-slate-400"
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce" />
-                    <span className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce delay-100" />
-                    <span className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce delay-200" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                  {isTyping && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="flex items-center gap-1.5 p-2.5 rounded-xl bg-slate-800/60 w-16 text-slate-400"
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce delay-100" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce delay-200" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
 
             {/* Interactive Chat Action */}
-            <div className="pt-4 mt-4 border-t border-white/10 flex items-center justify-between">
-              <button
-                onClick={handleNextMessage}
-                disabled={chatIndex >= scriptChats.length - 1 || isTyping}
-                className={`text-xs font-mono font-bold px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer ${
-                  chatIndex >= scriptChats.length - 1
-                    ? "bg-[#00C853]/20 text-[#00C853] border border-[#00C853]/40 cursor-default"
-                    : "bg-amber-400 text-neutral-950 hover:bg-amber-300 shadow-[0_0_20px_rgba(251,191,36,0.5)] active:scale-95"
-                }`}
-              >
-                {chatIndex >= scriptChats.length - 1 ? (
-                  <span>✓ Memori Subuh Lengkap</span>
-                ) : (
-                  <>
-                    <Send size={13} />
-                    <span>Balas Pesan ({chatIndex + 1}/{scriptChats.length})</span>
-                  </>
+            <div className="pt-5 mt-5 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleNextMessage}
+                  disabled={chatIndex >= scriptChats.length - 1 || isTyping}
+                  className={`text-xs font-mono font-bold px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer ${
+                    chatIndex >= scriptChats.length - 1
+                      ? "bg-[#00C853]/20 text-[#00C853] border border-[#00C853]/40 cursor-default"
+                      : "bg-amber-400 text-neutral-950 hover:bg-amber-300 shadow-[0_0_20px_rgba(251,191,36,0.5)] active:scale-95"
+                  }`}
+                >
+                  {chatIndex >= scriptChats.length - 1 ? (
+                    <span>✓ Memori Subuh Lengkap</span>
+                  ) : (
+                    <>
+                      <Send size={13} />
+                      <span>Balas Pesan ({chatIndex + 1}/{scriptChats.length})</span>
+                    </>
+                  )}
+                </button>
+
+                {chatIndex >= scriptChats.length - 1 && (
+                  <button
+                    onClick={handleResetChat}
+                    className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition-colors cursor-pointer"
+                    title="Ulangi Percakapan 02:14 AM"
+                  >
+                    <RotateCcw size={14} />
+                  </button>
                 )}
-              </button>
+              </div>
 
               <span className="text-[10px] font-mono text-slate-400">
-                {chatIndex >= scriptChats.length - 1 ? "Malam pertama yang menghangatkan" : "Sentuh untuk balas"}
+                {chatIndex >= scriptChats.length - 1
+                  ? "Malam pertama yang menghangatkan"
+                  : "Sentuh untuk membalas & lihat layar 3D"}
               </span>
             </div>
 
@@ -191,7 +235,7 @@ export default function Act1Winter({ onNext }: Act1WinterProps) {
       </div>
 
       {/* 3D Portal Jumping Gateway to Next Act */}
-      <div className="pt-8 max-w-xl mx-auto w-full">
+      <div className="pt-6 max-w-xl mx-auto w-full">
         <CosmicPortalGateway
           embeddedAct={1}
           currentAct={1}

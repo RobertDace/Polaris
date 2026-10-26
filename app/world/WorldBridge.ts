@@ -60,6 +60,10 @@ class WorldBridge {
   requestScrollTo(actNumber: number) {
     this.emit("scroll:request", actNumber);
   }
+
+  setScrollProgress(progress: number) {
+    this.emit("scroll:progress", progress);
+  }
 }
 
 export const worldBridge = new WorldBridge();

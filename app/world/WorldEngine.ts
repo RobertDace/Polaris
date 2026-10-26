@@ -350,6 +350,11 @@ export class WorldEngine {
       this.isWhatIf = isHolding;
     });
     this.unsubscribers.push(unsubWhatIf);
+
+    const unsubScrollProgress = worldBridge.on("scroll:progress", (progress: number) => {
+      this.setScrollProgress(progress);
+    });
+    this.unsubscribers.push(unsubScrollProgress);
   }
 
   // Set normalized progress along the camera spline (0: Hero, 1: Act 5 Polaris)

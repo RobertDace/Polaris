@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Star, Sparkles, Award, ArrowUp, HeartHandshake, Compass } from "lucide-react";
+import { Star, Sparkles, Award, ArrowUp, Box } from "lucide-react";
 import confetti from "canvas-confetti";
 import { playChimeSFX, playPopSFX } from "../utils/sfx";
 import WhatIfToggle from "./WhatIfToggle";
-import { worldBridge } from "../world/WorldBridge";
+import ThreePolarisStar3D from "./ThreePolarisStar3D";
+import ModelViewerGLB from "./ModelViewerGLB";
 
 interface Act5PolarisProps {
   onOpenPromiseModal: () => void;
@@ -25,6 +26,7 @@ export default function Act5Polaris({
     minutes: 0,
     seconds: 0,
   });
+  const [starMode, setStarMode] = useState<"procedural" | "glb">("procedural");
 
   const handleUnlockPromise = () => {
     playChimeSFX();
@@ -88,7 +90,7 @@ export default function Act5Polaris({
 
         <h2 className="font-serif text-3xl sm:text-6xl text-neutral-950 font-bold tracking-tight mt-4 leading-tight">
           Bukan Akhir yang Menyerah, <br />
-          <span className="bg-gradient-to-r from-[#0047FF] via-[#00C853] to-[#FFD700] bg-clip-text text-transparent italic">
+          <span className="bg-gradient-to-r from-[#0047FF] via-[#00C853] to-[#D97706] bg-clip-text text-transparent italic">
             Melainkan Arah Tujuan Hidupku.
           </span>
         </h2>
@@ -119,9 +121,9 @@ export default function Act5Polaris({
         </div>
 
         {/* Live Counter Grid with Primary Accents */}
-        <div className="grid grid-cols-4 gap-2.5 sm:gap-4 text-center flex-shrink-0">
+        <div className="grid grid-cols-4 gap-2.5 sm:gap-4 text-center shrink-0 tabular-nums">
           <div className="p-3 sm:p-5 rounded-2xl bg-[#FFF9DB] border-2 border-neutral-950 shadow-[4px_4px_0px_#000]">
-            <span className="block font-mono text-2xl sm:text-4xl font-black text-amber-500">
+            <span className="block font-mono text-2xl sm:text-4xl font-black text-amber-600">
               {timeDiff.days}
             </span>
             <span className="text-[9px] font-mono text-neutral-600 uppercase font-black">HARI</span>
@@ -147,7 +149,7 @@ export default function Act5Polaris({
         </div>
       </motion.div>
 
-      {/* 2. Dual Spectrum Vow Harmony (Non-Bento Interlocking Layout) */}
+      {/* 2. Dual Spectrum Vow Harmony */}
       <motion.div
         initial={{ opacity: 0, y: 25 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -158,7 +160,7 @@ export default function Act5Polaris({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           
           {/* Naiqo Side */}
-          <div className="space-y-3 p-6 rounded-2xl bg-white/80 border border-emerald-400/40 shadow-sm">
+          <div className="space-y-3 p-6 rounded-2xl bg-white/90 border border-emerald-400/50 shadow-sm">
             <span className="text-[10px] font-mono font-black text-[#00C853] uppercase tracking-widest block">
               NAIQO · HIJAU MATCHA & CAHAYA MURNI
             </span>
@@ -171,7 +173,7 @@ export default function Act5Polaris({
           </div>
 
           {/* Robit Side */}
-          <div className="space-y-3 p-6 rounded-2xl bg-white/80 border border-blue-400/40 shadow-sm">
+          <div className="space-y-3 p-6 rounded-2xl bg-white/90 border border-blue-400/50 shadow-sm">
             <span className="text-[10px] font-mono font-black text-[#0047FF] uppercase tracking-widest block">
               ROBIT · BIRU ELEKTRIK & JANJI TUMBUH MAPAN
             </span>
@@ -186,44 +188,71 @@ export default function Act5Polaris({
         </div>
       </motion.div>
 
-      {/* 3. The Interactive Real 3D Polaris Star Centerpiece Focus Ring */}
+      {/* 3. The Interactive Real 3D Polaris Star Centerpiece & Secret Letter Trigger */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
+        initial={{ opacity: 0, scale: 0.95 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
-        className="flex flex-col items-center justify-center my-8 relative"
+        className="flex flex-col items-center justify-center my-6 relative"
       >
-        <div className="relative flex flex-col items-center">
+        {/* Mode Switcher for Polaris 3D Centerpiece */}
+        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-neutral-900 text-white border-2 border-neutral-950 shadow-[4px_4px_0px_#000] mb-2">
           <button
-            onClick={handleUnlockPromise}
-            className="group relative px-8 py-6 rounded-3xl bg-neutral-950/85 border-2 border-amber-400 text-white shadow-[0_0_50px_rgba(255,215,0,0.35)] backdrop-blur-xl hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer flex flex-col items-center gap-3 text-center max-w-md"
-            title="Klik untuk membuka Surat Rahasia & Kotak Janji Robit"
+            onClick={() => { playPopSFX(); setStarMode("procedural"); }}
+            className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-colors cursor-pointer ${
+              starMode === "procedural"
+                ? "bg-amber-400 text-neutral-950 font-black"
+                : "text-neutral-300 hover:text-white"
+            }`}
           >
-            <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-amber-400 via-emerald-400 to-blue-500 p-0.5 animate-spin" style={{ animationDuration: "14s" }}>
-              <div className="w-full h-full rounded-full bg-neutral-950 flex items-center justify-center text-amber-300">
-                <Sparkles size={28} className="group-hover:rotate-45 transition-transform" />
-              </div>
-            </div>
-
-            <div>
-              <span className="text-[10px] font-mono text-amber-400 font-bold uppercase tracking-widest block">
-                BINTANG POLARIS 3D TERFOKUS DI LATAR DUNIA
-              </span>
-              <h4 className="font-serif text-xl sm:text-2xl font-bold text-white mt-1">
-                Buka Kotak Janji & Surat Rahasia
-              </h4>
-              <p className="text-xs text-neutral-300 font-light mt-1.5 leading-relaxed">
-                Sentuh untuk membuka ikrar masa depan dan surat satu tahun yang kutulis khusus untukmu.
-              </p>
-            </div>
-
-            <div className="px-5 py-2 rounded-full bg-amber-400 text-neutral-950 text-xs font-mono font-black uppercase flex items-center gap-2 shadow-lg group-hover:bg-amber-300 transition-colors">
-              <Star size={14} fill="currentColor" />
-              <span>Buka Surat Sekarang →</span>
-            </div>
+            Bintang Giroskop 3D
+          </button>
+          <button
+            onClick={() => { playPopSFX(); setStarMode("glb"); }}
+            className={`px-3 py-1.5 rounded-lg text-xs font-mono flex items-center gap-1.5 transition-colors cursor-pointer ${
+              starMode === "glb"
+                ? "bg-amber-400 text-neutral-950 font-black"
+                : "text-neutral-300 hover:text-white"
+            }`}
+          >
+            <Box size={12} />
+            <span>Kompas Bintang (.GLB)</span>
           </button>
         </div>
+
+        {starMode === "procedural" ? (
+          <ThreePolarisStar3D onUnlockPromise={handleUnlockPromise} />
+        ) : (
+          <div className="w-full max-w-md my-6">
+            <ModelViewerGLB
+              modelPath="/models/act5-polaris.glb"
+              fallbackTitle="Kompas Bintang Polaris (.GLB)"
+              accentColor="#FFD700"
+              className="w-full h-80"
+            />
+          </div>
+        )}
+
+        {/* Prominent Button to Unlock Promise Modal */}
+        <button
+          onClick={handleUnlockPromise}
+          className="group relative px-8 py-5 rounded-2xl bg-neutral-950 border-2 border-neutral-950 text-white shadow-[6px_6px_0px_#D97706] hover:translate-x-0.5 hover:translate-y-0.5 transition-all duration-200 cursor-pointer flex items-center gap-3"
+          title="Klik untuk membuka Surat Rahasia & Kotak Janji Robit"
+        >
+          <div className="w-10 h-10 rounded-xl bg-amber-400 text-neutral-950 flex items-center justify-center">
+            <Sparkles size={20} />
+          </div>
+          <div className="text-left">
+            <span className="text-[10px] font-mono text-amber-400 font-bold uppercase tracking-widest block">
+              SANCTUARY 365 HARI TERBUKA
+            </span>
+            <span className="font-serif text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+              <span>Buka Kotak Janji & Surat Rahasia</span>
+              <Star size={16} className="text-amber-400" fill="currentColor" />
+            </span>
+          </div>
+        </button>
       </motion.div>
 
       {/* 4. The Subversive "What If" Hold/Release Experience */}
